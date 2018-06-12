@@ -69,7 +69,7 @@ Casenet is pre-trained on cityscapes and following classes (with associated clas
   
 ### Build Vocab:  
   
-#### Casenet   
+#### Using Casenet   
   
 ##### Standard
 python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09 -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -f casenet -c 64 -s 5  
@@ -80,7 +80,7 @@ python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localizati
 ##### Change weights of casenet features and XY using alpha
 python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09 -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -f casenet -c 64 -s 5  -a 0.1  
   
-#### Sift   
+#### Using Sift   
   
 ##### Standard  
 python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -s 5  
@@ -93,7 +93,7 @@ python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localizati
   
 While creating VLAD descriptors, the script's input list and input directories must have both training and testing data.  
   
-#### Casenet   
+#### Using Casenet   
   
 ##### Standard
 python compute_vlad_descriptor.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/data.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/all -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -f casenet -c 64 -s 5  
@@ -106,7 +106,7 @@ python compute_vlad_descriptor.py -i /uusoc/exports/scratch/xiny/cvpr18-localiza
   
   
   
-#### Sift   
+#### Using Sift   
   
 ##### Standard  
 python compute_vlad_descriptor.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/data.txt -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -s 5  
