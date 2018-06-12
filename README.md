@@ -2,7 +2,7 @@
 VLASE: Vehicle Localization by Aggregating Semantic Edges   
   
 ## Pre-requisites:  
-1. Casenet  
+1. [Casenet] (https://arxiv.org/pdf/1705.09759.pdf)  
 2. opencv-2.4.13  
 3. Python libraries as listed in the requirements.txt  
   
@@ -13,7 +13,7 @@ VLASE: Vehicle Localization by Aggregating Semantic Edges
 
 ### Casenet Class Ids: 
 
-Casenet is pre-trained on cityscapes and following classes (with associated class ids) were used:   
+Casenet is pre-trained on [cityscapes] (https://www.cityscapes-dataset.com/) and following classes (with associated class ids) were used:   
   
 #### Static :  
 0 -> 'road'  
