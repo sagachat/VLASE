@@ -96,7 +96,7 @@ def main(args):
             desc = np.empty((des.shape[0],130))
             for i,keypoint in enumerate(kp):
                 desc[i] = np.hstack((des[i],keypoint.pt))
-                desc[i][-1] /= img_h
+                desc[i][-1] /= img_w
                 desc[i][-2] /= img_h
                 desc[i][0:128] /= 255
                 desc[i][-1] *= xy_weight
@@ -160,6 +160,7 @@ if __name__ == '__main__':
         args.thresh,
         args.alpha
     )
+    print "Vocabulary file will be created by name:",args.vocabulary_file_prefix+'.npz'
     args.all_feature_file = args.vocabulary_file_prefix+'.all_features.npz'
     args.use_minibatch_kmeans = True
     args.kmean_max_iter = 10000
