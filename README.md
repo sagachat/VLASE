@@ -5,23 +5,18 @@ classes such as sky and building using skylines, we generalize this approach to 
   
 ## Pre-requisites:  
 1. [Casenet](http://www.merl.com/research/license#CASENet)  
-2. opencv-2.4.13  
-3. Python libraries as listed in the [requirements.txt](https://github.com/sagachat/VLASE/blob/master/requirements.txt)  
+2. opencv-2.4.13  - Required for SIFT features and image processing
+3. Python libraries as listed in the [requirements.txt](https://github.com/sagachat/VLASE/blob/master/requirements.txt)
   
 ## Installation:  
 1. Install Python 2.7 and the libraries listed in the [requirements.txt](https://github.com/sagachat/VLASE/blob/master/requirements.txt)
 2. Install CASENet as per the instructions in it's README file. CASENet includes it's own Caffe version.
-3. Extract all the frames from your source video into a directory (We'll call it src). VLASE uses original frames for SIFT features.
-4. 
-  
-## Casenet Usage: 
- 
 
-### Casenet Class Ids: 
+## Casenet: 
 
 Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and following classes (with associated class ids) were used:   
   
-#### Static :  
+### Static classes:  
 0 -> 'road'  
 1 -> 'sidewalk'  
 2 -> 'building'  
@@ -34,7 +29,7 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
 9 -> 'terrain'  
 10 -> 'sky'  
   
-#### Dynamic:  
+### Dynamic classes:  
 11 -> 'person'  
 12 -> 'rider'  
 13 -> 'car'  
@@ -43,6 +38,14 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
 16 -> 'train'  
 17 -> 'motorcycle'  
 18 -> 'bicycle'  
+
+3. Extract all the frames from your source video into a directory (We'll call it src). VLASE uses original frames for SIFT baselines.
+4. Extract the CASENet features for the original 
+  
+## Casenet Usage: 
+ 
+
+
   
   
 ## Data Preparation:  
