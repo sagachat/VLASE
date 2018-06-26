@@ -42,7 +42,29 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
  
 ## Data Preparation:  
 1. Extract all the frames from the source dashcam video into a directory (We'll call it src). VLASE uses original frames for SIFT baselines.
-2. If you want to you VLASE with CASENet features then extract the CASENet features for the original frames into a directory (We'll call it result_root).
+2. If you want to you VLASE with CASENet features then extract the CASENet features for the original frames into a directory (We'll call it result_root). result_root will have a directory structure like following -
+   ```
+    |-- class_0
+    |-- class_1
+    |-- class_10
+    |-- class_11
+    |-- class_12
+    |-- class_13
+    |-- class_14
+    |-- class_15
+    |-- class_16
+    |-- class_17
+    |-- class_18
+    |-- class_2
+    |-- class_3
+    |-- class_4
+    |-- class_5
+    |-- class_6
+    |-- class_7
+    |-- class_8
+    `-- class_9
+   ```
+   These 19 directories contain features of each frame for 19 semantic classes. If there are total N frames then each of these directories will have N files.
 3. VLASE trains and tests on different sets of frames. So split your data into training and testing images.
 4. You must have a training and a testing data file with the GPS information of the frames. These files must have the data in following space separated format:
    ```
