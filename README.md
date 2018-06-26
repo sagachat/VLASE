@@ -92,7 +92,7 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
   
 ## Execution Instructions:  
   
-### Build Vocab:  ./scripts/build_vlad_vocabulary.py
+### Build Vocab:  scripts/build_vlad_vocabulary.py
 First of all, VLASE builds vocabulary using the training frames. Following are the input arguments for this script -
 
 ##### Required
@@ -120,7 +120,7 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
     '-s', '--skip_count', type=int, default='0',help=Number of frames to skip while training and testing VLAD. To reduce the execution time, we skip video frames. It did not make much difference in the performance as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we skip 5 frames while creating vocabulary as it does not cause much loss of information.
     ```
 Examples -
-    ```
+    
     Using Casenet with Removing features -   
     python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
   
@@ -131,28 +131,42 @@ Examples -
   
   
 ### Create VLAD descriptors:  
+After building vocab, VLASE creates the VLAD descriptors for training and testing frames. Following are the input arguments for this script -
+
+##### Required
+   
+   ```
+    '-tr', '--train_list', type=str,required=True,help=Absolute path of the training images list with gps information. This is the same list used for building vocabulary.
+    '-te', '--test_list', type=str,required=True,help=Absolute path of the testing images list with gps information.
+    '-src', '--src', type=str,required=True,help=Directory containing original source images, this directory must have both training and testing data.
+   ```
+
+##### Casenet specific arguments
+   ```
+    '-r', '--result_root', type=str,default=None,help=Directory containing casenet features, this directory must have both training and testing data.
+    '-t', '--thresh', type=float, default='0.5',help=Probability threshold value to use casenet features
+    '-rc', '--result_classes', type=int, default=19,help=Number of casenet classes
+    '-crf', '--removed_class',type=str, default=None,help=Comma seperated list of casenet class ids that should be removed during the experiment
+   ```
+##### Optional
+   ```
+    '-f','--feature_type', type=str, default='sift',help=Feature type used for localization - casenet or sift. By default, the script uses SIFT features.
+
+    '-c', '--vlad_feature_dimension', type=int, default='32',help=Number of clusters for VLAD. In our experiments, SIFT performed best with cluster=32 and Casenet was best with cluster=64.
+ 
+    '-a', '--alpha', type=float, default='0.5',help=Alpha gives weight to the features (Casenet/SIFT vs XY).  XY will have weight = (1-alpha).alpha=0.5 means equal weight to both. In our experiments, alpha=0.1 gave the best results.
+
+    '-s', '--skip_count', type=int, default='0',help=Number of frames to skip while training and testing VLAD. To reduce the execution time, we skip video frames. It did not make much difference in the performance as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we skip 5 frames while creating vocabulary as it does not cause much loss of information.
+    ```
+Examples -
+    
+    Using Casenet with Removing features -   
+    python compute_vlad_descriptor.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/all -src /home/sagar/KAIST/all -f casenet -c 64 -s 5 -crf 11,12,13  
   
+    Using Sift Standard -
+    python compute_vlad_descriptor.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -src /home/sagar/KAIST/all -s 5  
   
-#### Using Casenet   
-  
-##### Standard
-python compute_vlad_descriptor.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/all -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -f casenet -c 64 -s 5  
-  
-##### Remove features -   
-python compute_vlad_descriptor.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/all -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -f casenet -c 64 -s 5 -crf 11,12,13  
-  
-##### Change weights of casenet features and XY using alpha
-python compute_vlad_descriptor.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/all -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -f casenet -c 64 -s 5  -a 0.1  
-  
-  
-  
-#### Using Sift   
-  
-##### Standard  
-python compute_vlad_descriptor.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -s 5  
-  
-##### Change weights of SIFT features and XY using alpha
-python compute_vlad_descriptor.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/all -s 5  -a 0.1  
+   ``` 
   
 
 ### Localize:  
