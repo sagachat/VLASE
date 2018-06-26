@@ -10,6 +10,7 @@ classes such as sky and building using skylines, we generalize this approach to 
   
 ## Installation:  
 1. Install Python 2.7 and the libraries listed in the [requirements.txt](https://github.com/sagachat/VLASE/blob/master/requirements.txt)
+2. Install OpenCV 2.4.13. We prefer to build it from source.
 2. Install CASENet as per the instructions in it's README file. CASENet includes it's own Caffe version.
 
 ## Casenet: 
@@ -38,18 +39,15 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
 16 -> 'train'  
 17 -> 'motorcycle'  
 18 -> 'bicycle'  
-
-3. Extract all the frames from your source video into a directory (We'll call it src). VLASE uses original frames for SIFT baselines.
-4. Extract the CASENet features for the original 
-  
-## Casenet Usage: 
  
-
-
-  
-  
 ## Data Preparation:  
-  
+1. Extract all the frames from the source dashcam video into a directory (We'll call it src). VLASE uses original frames for SIFT baselines.
+2. If you want to you VLASE with CASENet features then extract the CASENet features for the original frames into a directory (We'll call it result_root).
+3. VLASE trains and tests on different sets of frames. So split your data into training and testing images.
+4. You must have a training and a testing data file with the GPS information of the frames. These files must have the data in following space separated format:
+    # ImageFile X Y
+    # AM09_000000.png 36.37261637 127.3641256
+    # X and Y are gps coordinates of the frame in meters.
   
   
   
