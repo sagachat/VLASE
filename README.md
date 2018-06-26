@@ -122,11 +122,11 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
 
 ##### Examples
    ```
-###### Using Casenet with Removing features -   
-python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
+    Using Casenet with Removing features -   
+    python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
   
-###### Using Sift Standard -
-python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -src /home/sagar/KAIST/src -s 5  
+    Using Sift Standard -
+    python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -src /home/sagar/KAIST/src -s 5  
   
    ``` 
   
