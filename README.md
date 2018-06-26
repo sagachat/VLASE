@@ -2,6 +2,8 @@
 
 VLASE is a framework to use semantic edge features from images to achieve on-road localization. Semantic edge features denote edge contours that separate pairs of distinct objects such as building-sky, roadsidewalk, and building-ground. While prior work has shown promising results by utilizing the boundary between prominent
 classes such as sky and building using skylines, we generalize this approach to consider semantic edge features that arise from 19 different classes. Our localization algorithm is simple, yet very powerful. We extract semantic edge features using a recently introduced CASENet architecture and utilize VLAD framework to perform image retrieval. Our experiments show that we achieve improvement over some of the state-of-the-art localization algorithms such as SIFT-VLAD and its deep variant NetVLAD. We use ablation study to study the importance of different semantic classes, and show that our unified approach achieves better performance compared to individual prominent features such as skylines.
+
+Here is the demo video for VLASE - https://youtu.be/IKZXZmmdtiA
   
 ## Pre-requisites:  
 1. [Casenet](http://www.merl.com/research/license#CASENet)  
@@ -76,33 +78,53 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
 
 5. X and Y are the gps coordinates of the frames. These can be global latitude and longitude or they can be in meters (relative to the starting frame).
   
-  
-  
-  
-  
-  
-  
-  
-
-  
 ## Types of experiments:  
 
 ### Sift
-- Standard  
+- Standard: All features equally weighted
 - Sift with changing the value of alpha (Assign different weights to sift features and xy coordinate features)  
-- Sift with changing the number of clusters  
   
 ### Casenet
-- Standard  
+- Standard: All features equally weighted
 - Casenet with changing the value of alpha (Assign different weights to casenet features and xy coordinate features)  
-- Casenet with changing the number of clusters  
 - Casenet with removing a subset of features (All Static, Combination of some static)  
   
   
 ## Execution Instructions:  
   
-### Build Vocab:  
-  
+### Build Vocab:  ./scripts/build_vlad_vocabulary.py
+First of all, VLASE builds vocabulary using the training frames. Following are the input arguments for this script -
+
+##### Required
+   
+   ```
+    '-i', '--input_list', type=str,required=True,
+                    help=Absolute path of the training images list with gps information
+    '-src', '--src', type=str,required=True,
+                    help=Directory containing original source training images
+   ```
+
+    ### Casenet specific arguments
+    '-r', '--result_root', type=str,default=None,
+                    help=Directory containing casenet features of training images
+    '-t', '--thresh', type=float, default='0.5',
+                    help=Probability threshold value to use casenet features
+    '-rc', '--result_classes', type=int, default=19,
+                    help=Number of casenet classes
+    '-crf', '--removed_class',type=str, default=None,
+                    help=Comma seperated list of casenet class ids (Refer readme for class id) that should be removed during the experiment
+   ```
+##### Optional
+   ```
+    '-f','--feature_type', type=str, default='sift',help=Feature type used for localization - casenet or sift. By default, the script uses SIFT features.
+
+    '-c', '--vlad_feature_dimension', type=int, default='32',help=Number of clusters for VLAD. In our experiments, SIFT performed best with cluster=32 and Casenet was best with cluster=64.
+ 
+    '-a', '--alpha', type=float, default='0.5',help=Alpha gives weight to the features (Casenet/SIFT vs XY).  XY will have weight = (1-alpha).alpha=0.5 means equal weight to both. In our experiments, alpha=0.1 gave the best results.
+
+    '-s', '--skip_count', type=int, default='0',help=Number of frames to skip while training and testing VLAD. To reduce the execution time, we skip video frames. It did not make much difference in the performance as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we skip 5 frames while creating vocabulary as it does not cause much loss of information.
+    ```
+
 #### Using Casenet   
   
 ##### Standard
@@ -159,10 +181,7 @@ python vlad_place_recognition.py -tr /uusoc/exports/scratch/xiny/cvpr18-localiza
 #### For a specific distance threshold
 python vlad_place_recognition.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global -d 10
   
-  
-## Demo Video:  
-  
-https://youtu.be/IKZXZmmdtiA
+    
   
   
   
