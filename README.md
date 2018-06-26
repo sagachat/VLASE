@@ -45,10 +45,12 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
 2. If you want to you VLASE with CASENet features then extract the CASENet features for the original frames into a directory (We'll call it result_root).
 3. VLASE trains and tests on different sets of frames. So split your data into training and testing images.
 4. You must have a training and a testing data file with the GPS information of the frames. These files must have the data in following space separated format:
+   ```
    ###### Frame_Name X Y
    ###### AM09_000000.png 36.37261637 127.3641256
    ###### AM09_000001.png 36.37261636 127.3641256
    Refer to the directory [sample_data](https://github.com/sagachat/VLASE/blob/master/sample_data/) for sample training and testing files.
+   ```
 5. X and Y are the gps coordinates of the frames. These can be global latitude and longitude or they can be in meters (relative to the starting frame).
   
   
