@@ -92,7 +92,7 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
   
 ## Execution Instructions:  
   
-1. Build Vocab:  ./scripts/build_vlad_vocabulary.py
+### Build Vocab:  ./scripts/build_vlad_vocabulary.py
 First of all, VLASE builds vocabulary using the training frames. Following are the input arguments for this script -
 
 ##### Required
@@ -120,24 +120,15 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
     '-s', '--skip_count', type=int, default='0',help=Number of frames to skip while training and testing VLAD. To reduce the execution time, we skip video frames. It did not make much difference in the performance as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we skip 5 frames while creating vocabulary as it does not cause much loss of information.
     ```
 
-#### Using Casenet   
+##### Examples
+   ```
+###### Using Casenet with Removing features -   
+python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
   
-##### Standard
-python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09 -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -f casenet -c 64 -s 5  
+###### Using Sift Standard -
+python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -src /home/sagar/KAIST/src -s 5  
   
-##### Remove features -   
-python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09 -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -f casenet -c 64 -s 5  -crf 11,12,13  
-  
-##### Change weights of casenet features and XY using alpha
-python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -r /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09 -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -f casenet -c 64 -s 5  -a 0.1  
-  
-#### Using Sift   
-  
-##### Standard  
-python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -s 5  
-  
-##### Change weights of SIFT features and XY using alpha
-python build_vlad_vocabulary.py -i /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -src /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST/AM09/resized -s 5  -a 0.1  
+   ``` 
   
   
 ### Create VLAD descriptors:  
