@@ -1,5 +1,8 @@
 # VLASE  
 VLASE: Vehicle Localization by Aggregating Semantic Edges   
+
+VLASE is a framework to use semantic edge features from images to achieve on-road localization. Semantic edge features denote edge contours that separate pairs of distinct objects such as building-sky, roadsidewalk, and building-ground. While prior work has shown promising results by utilizing the boundary between prominent
+classes such as sky and building using skylines, we generalize this approach to consider semantic edge features that arise from 19 different classes. Our localization algorithm is simple, yet very powerful. We extract semantic edge features using a recently introduced CASENet architecture and utilize VLAD framework to perform image retrieval. Our experiments show that we achieve improvement over some of the state-of-the-art localization algorithms such as SIFT-VLAD and its deep variant NetVLAD. We use ablation study to study the importance of different semantic classes, and show that our unified approach achieves better performance compared to individual prominent features such as skylines.
   
 ## Pre-requisites:  
 1. [Casenet](http://www.merl.com/research/license#CASENet)  
@@ -7,9 +10,13 @@ VLASE: Vehicle Localization by Aggregating Semantic Edges
 3. Python libraries as listed in the [requirements.txt](https://github.com/sagachat/VLASE/blob/master/requirements.txt)  
   
 ## Installation:  
+1. Install Python 2.7 and the libraries listed in the [requirements.txt](https://github.com/sagachat/VLASE/blob/master/requirements.txt)
+2. Install CASENet as per the instructions in it's README file. CASENet includes it's own Caffe version.
+3. Extract all the frames from your source video into a directory (We'll call it src). VLASE uses original frames for SIFT features.
+4. 
   
-  
-## Casenet Usage:  
+## Casenet Usage: 
+ 
 
 ### Casenet Class Ids: 
 
