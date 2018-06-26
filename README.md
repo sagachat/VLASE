@@ -98,13 +98,12 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
 ##### Required
    
    ```
-    '-i', '--input_list', type=str,required=True,
-                    help=Absolute path of the training images list with gps information
-    '-src', '--src', type=str,required=True,
-                    help=Directory containing original source training images
+    '-i', '--input_list', type=str,required=True,help=Absolute path of the training images list with gps information
+    '-src', '--src', type=str,required=True,help=Directory containing original source training images
    ```
 
-    ### Casenet specific arguments
+#### Casenet specific arguments
+   ```
     '-r', '--result_root', type=str,default=None,
                     help=Directory containing casenet features of training images
     '-t', '--thresh', type=float, default='0.5',
