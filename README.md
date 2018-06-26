@@ -197,13 +197,3 @@ python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/s
 
 - For a specific distance threshold e.g. d=10
 python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global -d 10
-  
-    
-  
-  
-  
-  
-  
-  
-  
-  
