@@ -102,16 +102,12 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
     '-src', '--src', type=str,required=True,help=Directory containing original source training images
    ```
 
-#### Casenet specific arguments
+##### Casenet specific arguments
    ```
-    '-r', '--result_root', type=str,default=None,
-                    help=Directory containing casenet features of training images
-    '-t', '--thresh', type=float, default='0.5',
-                    help=Probability threshold value to use casenet features
-    '-rc', '--result_classes', type=int, default=19,
-                    help=Number of casenet classes
-    '-crf', '--removed_class',type=str, default=None,
-                    help=Comma seperated list of casenet class ids (Refer readme for class id) that should be removed during the experiment
+    '-r', '--result_root', type=str,default=None,help=Directory containing casenet features of training images
+    '-t', '--thresh', type=float, default='0.5',help=Probability threshold value to use casenet features
+    '-rc', '--result_classes', type=int, default=19,help=Number of casenet classes
+    '-crf', '--removed_class',type=str, default=None,help=Comma seperated list of casenet class ids that should be removed during the experiment
    ```
 ##### Optional
    ```
