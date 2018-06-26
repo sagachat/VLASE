@@ -110,6 +110,7 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
     '-crf', '--removed_class',type=str, default=None,help=Comma seperated list of casenet class ids that should be removed during the experiment
    ```
 ##### Optional
+   ```
     '-f','--feature_type', type=str, default='sift',help=Feature type used for localization - casenet or sift. By default, the script uses SIFT features.
 
     '-c', '--vlad_feature_dimension', type=int, default='32',help=Number of clusters for VLAD. In our experiments, SIFT performed best with cluster=32 and Casenet was best with cluster=64.
@@ -118,7 +119,7 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
 
     '-s', '--skip_count', type=int, default='0',help=Number of frames to skip while training and testing VLAD. To reduce the execution time, we skip video frames. It did not make much difference in the performance as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we skip 5 frames while creating vocabulary as it does not cause much loss of information.
     ```
-##### Examples -
+Examples -
     ```
     Using Casenet with Removing features -   
     python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
