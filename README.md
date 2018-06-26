@@ -119,8 +119,7 @@ First of all, VLASE builds vocabulary using the training frames. Following are t
 
     '-s', '--skip_count', type=int, default='0',help=Number of frames to skip while training and testing VLAD. To reduce the execution time, we skip video frames. It did not make much difference in the performance as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we skip 5 frames while creating vocabulary as it does not cause much loss of information.
     ```
-##### Examples
-   ```
+Examples -
     Using Casenet with Removing features -   
     python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
   
