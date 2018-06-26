@@ -93,7 +93,7 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
 ## Execution Instructions:  
   
 ### Build Vocab:  scripts/build_vlad_vocabulary.py
-First of all, VLASE builds vocabulary using the training frames. Following are the input arguments for this script -
+First of all, VLASE builds vocabulary using the training frames. It creates and saves the vocabulary file in the same directory. Following are the input arguments for this script -
 
 ##### Required
    
@@ -130,8 +130,8 @@ Examples -
    ``` 
   
   
-### Create VLAD descriptors:  
-After building vocab, VLASE creates the VLAD descriptors for training and testing frames. Following are the input arguments for this script -
+### Create VLAD descriptors: scripts/compute_vlad_descriptor.py
+After building vocab, VLASE creates the VLAD descriptors for training and testing frames. It creates and saves the vlad codebook file in the same directory. Following are the input arguments for this script -
 
 ##### Required
    
@@ -169,16 +169,34 @@ Examples -
    ``` 
   
 
-### Localize:  
+### Localize:  scripts/vlad_place_recognition.py
+Finally, this script is used to calculate the localization accuracy using the VLAD codebook. Here are it's input args -
+
+##### Required
+   
+   ```
+    '-tr', '--train_list', type=str,required=True,help=Absolute path of the training images list with gps information. This is the same list used for building vocabulary.
+    '-te', '--test_list', type=str,required=True,help=Absolute path of the testing images list with gps information.
+    '-v', '--vlad_features', type=str,required=True,help=Absolute path of the vlad codebook file created by compute_vlad_descriptor.py
+   ```
+   
+##### Optional
+   ```
+    '-k', '--top_k',type=int, default=5,help="Number of nearest neighbors to retrieve"
+    '-d', '--acceptance_distance_thresh',type=float, default=5.0,help="Distnace threshold for localization in meters"
+    '-g', '--gps_type',type=str, default='meters',help="Type of gps coordinates. It can be either meters or global. global means global lat & long"
+   ```
   
-#### Global gps lat & long
-python vlad_place_recognition.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global
+##### Examples 
+   ```
+Localization with Global gps lat & long
+python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global
 
-#### gps in meters
-python vlad_place_recognition.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz
+gps in meters
+python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz
 
-#### For a specific distance threshold
-python vlad_place_recognition.py -tr /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM09_GPS.txt -te /uusoc/exports/scratch/xiny/cvpr18-localization_dataset/KAIST/KAIST_CASENET/AM05_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global -d 10
+For a specific distance threshold e.g. d=10
+python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global -d 10
   
     
   
