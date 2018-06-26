@@ -92,7 +92,7 @@ Casenet is pre-trained on [cityscapes](https://www.cityscapes-dataset.com/) and 
   
 ## Execution Instructions:  
   
-### Build Vocab:  ./scripts/build_vlad_vocabulary.py
+1. Build Vocab:  ./scripts/build_vlad_vocabulary.py
 First of all, VLASE builds vocabulary using the training frames. Following are the input arguments for this script -
 
 ##### Required
