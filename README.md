@@ -121,10 +121,10 @@ First of all, VLASE builds vocabulary using the training frames. It creates and 
     ```
 Examples -
     
-    Using Casenet with Removing features -   
+- Using Casenet with Removing features -   
     python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/train -src /home/sagar/KAIST/src -f casenet -c 64 -s 5  -crf 11,12,13  
   
-    Using Sift Standard -
+- Using Sift Standard
     python build_vlad_vocabulary.py -i /home/sagar/KAIST/train_GPS.txt -src /home/sagar/KAIST/src -s 5  
   
    ``` 
@@ -160,10 +160,10 @@ After building vocab, VLASE creates the VLAD descriptors for training and testin
     ```
 Examples -
     
-    Using Casenet with Removing features -   
+- Using Casenet with Removing features
     python compute_vlad_descriptor.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -r /home/sagar/KAIST/KAIST_CASENET/all -src /home/sagar/KAIST/all -f casenet -c 64 -s 5 -crf 11,12,13  
   
-    Using Sift Standard -
+- Using Sift Standard
     python compute_vlad_descriptor.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -src /home/sagar/KAIST/all -s 5  
   
    ``` 
@@ -189,13 +189,13 @@ Finally, this script is used to calculate the localization accuracy using the VL
   
 ##### Examples 
    ```
-Localization with Global gps lat & long
+- Localization with Global gps lat & long
 python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global
 
-gps in meters
+- gps in meters
 python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz
 
-For a specific distance threshold e.g. d=10
+- For a specific distance threshold e.g. d=10
 python vlad_place_recognition.py -tr /home/sagar/KAIST/train_GPS.txt -te /home/sagar/KAIST/test_GPS.txt -v vocabulary_f=casenet_k=64_t=0.5_alpha=0.5.vlad.npz -g global -d 10
   
     
