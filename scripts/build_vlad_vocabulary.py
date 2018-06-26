@@ -125,7 +125,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--alpha', type=float, default='0.5',
                     help="Weight given to the features of feature_type, xy will have weight = (1-alpha)")
 
-    # To reduce the execution time, we skip video frames. It does not make much difference in the performance
+    # To reduce the execution time, we skip video frames. It did not make much difference in the performance
     # as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we 
     # skip 5 frames while creating vocabulary as it does not cause much loss of information.
     parser.add_argument('-s', '--skip_count', type=int, default='0',

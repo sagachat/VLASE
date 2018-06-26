@@ -28,7 +28,6 @@ class XYCASENetVLAD(object):
                  do_SSR=True):
         self.VOCAB = VOCAB
         self.nclusters, ndim = self.VOCAB.shape
-        assert(ndim==21)
 
         self.KM = KMeans(self.nclusters, copy_x=False)
         self.KM.cluster_centers_ = self.VOCAB
@@ -47,7 +46,7 @@ class XYCASENetVLAD(object):
 
     def _convert_CASENet_prob_to_features(self, prob, args):
         img_h, img_w, ndim = prob.shape
-        assert(img_h==self.img_h and img_w==self.img_w and ndim==19)
+        assert(img_h==self.img_h and img_w==self.img_w)
         feat = np.concatenate((self.ii,self.jj,prob),axis=2).astype(np.float32)
         feat = feat.reshape(np.prod(feat.shape[:2]), feat.shape[-1])
         mask = ((prob>self.thresh).sum(axis=2))>0
@@ -129,7 +128,9 @@ def main(args):
     VOCAB = np.load(args.vocab_file)['vocabulary']
 
     #parse input list
-    lines = read_list(args.input_list,args.skip_count)
+    lines = read_list(args.train_list,args.skip_count)
+    lines.extend(read_list(args.test_list,args.skip_count))
+    print("Total number of training and testing images =",len(lines))
     img_example = cv2.imread(
         os.path.join(args.src ,lines[0])
     )
@@ -159,7 +160,7 @@ def main(args):
                 prob = np.delete(prob,args.removed_class,axis=2)
             vlad = _VLAD.compute(prob,args)
             name2vlad[l] = vlad
-            print(l.split('_')[0]+'/'+l)
+            print(l,prob.shape)
     else:
         _VLAD = VLAD(VOCAB=VOCAB)
         xy_weight = float(1 - args.alpha)
@@ -200,7 +201,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--alpha', type=float, default='0.5',
                     help="Weight given to the features of feature_type, xy will have weight = (1-alpha)")
 
-    # To reduce the execution time, we skip video frames. It does not make much difference in the performance
+    # To reduce the execution time, we skip video frames. It did not make much difference in the performance
     # as we skip according to the frame rate of videos. For e.g. KAIST dataset has frame rate = 10, so we 
     # skip 5 frames while creating vocabulary as it does not cause much loss of information.
     parser.add_argument('-s', '--skip_count', type=int, default='0',
@@ -208,12 +209,14 @@ if __name__ == '__main__':
 
     ### Required arguments
 
-    # The input list must have the data in following space separated format:
+    # The input lists must have the data in following space separated format:
     # ImageFile X Y
     # AM09_000000.png 36.37261637 127.3641256
     # X and Y are gps coordinates of the frame in meters.
-    parser.add_argument('-i', '--input_list', type=str,required=True,
-                    help="Absolute path of the images list with gps information, this list must have both training and testing data.")
+    parser.add_argument('-tr', '--train_list', type=str,required=True,
+                    help="Absolute path of the training images list with gps information. This is the same list used for building vocabulary.")
+    parser.add_argument('-te', '--test_list', type=str,required=True,
+                    help="Absolute path of the testing images list with gps information.")
     parser.add_argument('-src', '--src', type=str,required=True,
                     help="Directory containing original source images, this directory must have both training and testing data.")
 
@@ -252,6 +255,6 @@ if __name__ == '__main__':
                 parser.error("--removed_class must have comma seperated values between 0 to 18.")
             print "CaseNet classes to be removed from this experiment =", args.removed_class
 
-    assert(os.path.exists(args.input_list))
-
+    assert(os.path.exists(args.train_list))
+    assert(os.path.exists(args.test_list))
     main(args)
