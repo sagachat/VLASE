@@ -1,7 +1,7 @@
 '''
 vlad_place_recognition.py
 
-author  : schaturvedi
+author  : cfeng, schaturvedi
 created : 6/7/18 1:15 AM
 '''
 
