@@ -1,7 +1,7 @@
 '''
 compute_vlad_descriptor.py
 
-author  : schaturvedi
+author  : cfeng, schaturvedi
 created : 5/8/18 12:21 AM
 '''
 
