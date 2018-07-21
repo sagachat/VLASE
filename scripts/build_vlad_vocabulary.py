@@ -1,7 +1,7 @@
 '''
 build_vlad_vocabulary.py
 
-author  : schaturvedi
+author  : cfeng, schaturvedi
 created : 4/22/18 9:56 PM
 '''
 
