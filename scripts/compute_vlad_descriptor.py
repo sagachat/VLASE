@@ -170,8 +170,8 @@ def main(args):
             desc = np.empty((des.shape[0],130))
             for i,keypoint in enumerate(kp):
                 desc[i] = np.hstack((des[i],keypoint.pt))
-                desc[i][-1] /= img_w
-                desc[i][-2] /= img_h
+                desc[i][-1] /= img_h
+                desc[i][-2] /= img_w
                 desc[i][0:128] /= 255
                 desc[i][-1] *= xy_weight
                 desc[i][-2] *= xy_weight
