@@ -29,12 +29,14 @@ def read_list(input_list_file, skip_count):
 def load_casenet_result(img_h, img_w, result_fmt, K_class, idx_base):
     prob = np.zeros((img_h, img_w, K_class), dtype=np.float32)
     for k in xrange(K_class):
+        #print("load casenet: {}".format(result_fmt%(k+idx_base)))
         prob_k = cv2.imread(result_fmt%(k+idx_base), cv2.IMREAD_GRAYSCALE)
         prob[:,:,k] = prob_k.astype(np.float32) / 255.
     return prob
 
 def describeSIFT(image):
     sift = cv2.SIFT()
+    #sift = cv2.xfeatures2d.SIFT_create()
     kp, des = sift.detectAndCompute(image,None)
     return kp,des
 

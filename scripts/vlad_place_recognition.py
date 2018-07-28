@@ -12,11 +12,33 @@ import time
 import argparse
 import math
 import numpy as np
+import copy
 from matplotlib import pyplot as plt
 
 import cv2
+from geopy.distance import vincenty
 
-def read_records(input_records_file):
+start_location = None
+
+# convert a GPS into coordinate with unit meters 
+def gps2coordinate(p2,p1):
+    x = vincenty(p1, (p2[0], p1[1])).meters
+    y = vincenty(p1, (p1[0], p2[1])).meters
+    x = -x if p2[0] < p1[0] else x
+    y = -y if p2[1] < p1[1] else y
+    return [round(x,6),round(y,6)]
+
+def get_coordinates(records):
+    global start_location
+    if start_location == None:
+        start_location = (records[0]['x'], records[0]['y'])
+    for r in records:
+        coord = gps2coordinate((r['x'],r['y']), start_location)
+        r['x'] = coord[0]
+        r['y'] = coord[1]
+    return records
+
+def read_records(input_records_file, gps_type):
     lines = open(input_records_file).readlines()[1:]
 
     records = [
@@ -25,24 +47,33 @@ def read_records(input_records_file):
     ]
 
     records = np.array(
-        [(r[0], float(r[1]), float(r[2]))
-         for r in records],
+            [(r[0], float(r[1]), float(r[2]))
+                for r in records],
         dtype=[('name', object) ,('x', float), ('y', float)]
     )
 
     return records
 
+
 def main(args):
     
-
     #load data    
-    train_records = read_records(args.train_list)
+    train_records = read_records(args.train_list, args.gps_type)
     train_names = [r[0] for r in train_records]
-    test_records = read_records(args.test_list)
+    test_records = read_records(args.test_list, args.gps_type)
     test_names = [r[0] for r in test_records]
     name2vlad = np.load(args.vlad_features)['name2vlad'].item()
-    #print(len(train_records),len(test_records),len(train_names),len(test_names))
-
+    print(len(train_records),len(test_records),len(train_names),len(test_names))
+   
+    # convert GPS into coordinate with unit meter
+    if args.gps_type == 'global':
+        train_records = get_coordinates(train_records)
+        test_gps = copy.deepcopy(test_records)
+        print('Before: test_gps[0]: {}'.format(test_gps[0]))
+        test_records = get_coordinates(test_records)
+        print('After: test_gps[0]: {}'.format(test_gps[0]))
+        print('After: train_records[0]: {}'.format(test_records[0]))
+        
     def get_records():
 
         map_idx=[]
@@ -61,10 +92,11 @@ def main(args):
             ith_name = test_names[ith]
             #skip images whose vlad are not computed
             if not name2vlad.has_key(ith_name):
+                print('{} not found in name2vlad'.format(ith_name))
                 continue
             loc_idx.append(ith)
             loc_vlad.append(name2vlad[ith_name])
-        #print(len(map_idx),len(loc_idx),len(map_vlad),len(loc_vlad))
+        print(len(map_idx),len(loc_idx),len(map_vlad),len(loc_vlad))
         return map_idx, loc_idx, map_vlad, loc_vlad
 
     map_idx, loc_idx, map_vlad, loc_vlad = get_records()
@@ -72,46 +104,23 @@ def main(args):
     map_vlad_mat = np.array(map_vlad)
     loc_pairs = zip(loc_idx, loc_vlad)
 
-    def distance_for_global_coordinates(lat1, lng1, lat2, lng2):
-        #return distance as meter between global latitude and longitude. if you want km distance, remove "* 1000"
-        radius = 6371 * 1000 
-
-        dLat = (lat2-lat1) * math.pi / 180
-        dLng = (lng2-lng1) * math.pi / 180
-
-        lat1 = lat1 * math.pi / 180
-        lat2 = lat2 * math.pi / 180
-
-        val = math.sin(dLat/2) * math.sin(dLat/2) + math.sin(dLng/2) * math.sin(dLng/2) * math.cos(lat1) * math.cos(lat2)    
-        ang = 2 * math.atan2(math.sqrt(val), math.sqrt(1-val))
-        return radius * ang
-    
     def whether_should_found(r_query):
-        '''check if query record r_query falls within acceptance distance of any record in the map'''
-        if args.gps_type.lower() == 'global':
-            d = []
-            for ith in map_idx:
-                lat1 = train_records[ith]['x']
-                lng1 = train_records[ith]['y']
-                lat2 = r_query['x']
-                lng2 = r_query['y']
-                dist = distance_for_global_coordinates(lat1, lng1, lat2, lng2)
-                d.append(dist)
-            d = np.array(d)
-            return np.any(d<=args.acceptance_distance_thresh)
-        else:
-            xy_map = np.array([(train_records[ith]['x'],train_records[ith]['y']) for ith in map_idx])
-            xy_query = np.tile(np.array([r_query['x'], r_query['y']]), (len(map_idx), 1))
-            dxy = xy_map - xy_query
-            d = np.sqrt( (dxy*dxy).sum(axis=1) )
-            return np.any(d<=args.acceptance_distance_thresh)
-
+        xy_map = np.array([(train_records[ith]['x'],train_records[ith]['y']) for ith in map_idx])
+        xy_query = np.tile(np.array([r_query['x'], r_query['y']]), (len(map_idx), 1))
+        dxy = xy_map - xy_query
+        d = np.sqrt( (dxy*dxy).sum(axis=1) )
+        return np.any(d<=args.acceptance_distance_thresh)
 
 
     #localize all images with vlad but not used for mapping/building vocabulary
     total_found = np.zeros((args.top_k,), dtype=int)
+    ith_found = np.zeros(len(test_records))
+    cnt = 0
     total_should_found = 0
     for ith, ith_vlad in loc_pairs:
+        cnt = cnt+1
+        if cnt % 1000 == 0:
+            print('compute for query %d'%cnt)
         ith_name = test_names[ith]
         ith_rec = test_records[ith]
         ith_vlad = name2vlad[ith_name]
@@ -127,16 +136,13 @@ def main(args):
                 continue
             jth = map_idx[results[k]]
             jth_rec = train_records[jth]
-            if args.gps_type.lower() == 'global':
-                dij = distance_for_global_coordinates(jth_rec['x'],jth_rec['y'],ith_rec['x'],ith_rec['y'])
-            else:
-                dij = np.sqrt((ith_rec['x']-jth_rec['x'])**2+(ith_rec['y']-jth_rec['y'])**2)
+            dij = np.sqrt((ith_rec['x']-jth_rec['x'])**2+(ith_rec['y']-jth_rec['y'])**2)
             found[k] = dij<=args.acceptance_distance_thresh
         top_k_found = np.cumsum(found)>0
 
         total_found += top_k_found
         #print('processed {}'.format(ith_name))
-
+        ith_found[ith] =  top_k_found[args.top_k-1]
 
     #report results
     print('for acceptance distance={:.1f}m:'.format(args.acceptance_distance_thresh))
@@ -146,6 +152,20 @@ def main(args):
             total_found[k],
             total_should_found,
             total_found[k]*100.0/total_should_found))
+    found_gps = [] 
+    if args.gps_type == 'global':
+        # get found GPSs for result visualization later
+        # Note: type(test_gps[i]): numpy.void as it has multiple data types associated with multiple fiels
+        #       test_gps[i][0] is okay. But test_gps[i][1:] will lead to "invalid index" error.
+        found_gps = [ 
+                (test_gps[i]['x'], test_gps[i]['y']) 
+                for i in range(len(ith_found)) if ith_found[i]
+        ]
+        fname_found = args.test_list.split('/')[-1].replace('.csv', '_d={}_found.txt'.format(args.acceptance_distance_thresh))
+        print('found GPSs are written into {}'.format(fname_found))
+        with open(fname_found, 'w') as f:
+            for x,y in found_gps:
+                f.write('{} {}\n'.format(x,y))
 
 
 if __name__ == '__main__':
