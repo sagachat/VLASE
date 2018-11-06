@@ -3,6 +3,8 @@
 VLASE is a framework to use semantic edge features from images to achieve on-road localization. Semantic edge features denote edge contours that separate pairs of distinct objects such as building-sky, roadsidewalk, and building-ground. While prior work has shown promising results by utilizing the boundary between prominent
 classes such as sky and building using skylines, we generalize this approach to consider semantic edge features that arise from 19 different classes. Our localization algorithm is simple, yet very powerful. We extract semantic edge features using a recently introduced CASENet architecture and utilize VLAD framework to perform image retrieval. Our experiments show that we achieve improvement over some of the state-of-the-art localization algorithms such as SIFT-VLAD and its deep variant NetVLAD. We use ablation study to study the importance of different semantic classes, and show that our unified approach achieves better performance compared to individual prominent features such as skylines.
 
+** This code is ONLY for academic purposes. If you are interested in commercialising the code, please contact Srikumar Ramalingam (srikumar@cs.utah.edu)
+
 Paper - https://arxiv.org/abs/1807.02536
 
 Demo video - https://youtu.be/IKZXZmmdtiA
